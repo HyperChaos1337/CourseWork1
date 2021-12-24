@@ -114,13 +114,13 @@ char get_garbage(struct Sentence *sent){
         tolower(sent -> str[m+6]) == 'e') k += 1;
         }
         if (k == 0){
-            result* = "Clean!";
+            result = "Clean!";
         }
         else if (k >= 1 && k <= 5){
-            result* = "Must be washed";
+            result = "Must be washed";
         }
         else if (k > 5){
-            result* = "It is a dump";
+            result = "It is a dump";
         }
     return result;
 }
