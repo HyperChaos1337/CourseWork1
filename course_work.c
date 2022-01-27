@@ -119,17 +119,38 @@ void get_garbage(struct Sentence *sent){
     
 }
 
-int compare(const void *a, const void *b){
+int compare(const void * a, const void * b){
     
-    char vows[12] = ['A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'];
-    char sent1;
-    chat sent2;
+    char vows[12] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    
+    char **snt1 = (char**) a;
+    char **snt2 = (char**) b;
     
     int start_with_vow1 = 0;
     int start_with_vow2 = 0;
     
+    char * sent1 = *snt1;
+    char * sent2 = *snt2;
+    
+    for (int k = 0; k < strlen(sent1); k++){
+        for (int l = 0; l < 12; l++){
+            if(sent1[0] = vows[l]) start_with_vow1++;
+        }
+    }
+    
+    for (int k = 0; k < strlen(sent2); k++){
+        for (int l = 0; l < 12; l++){
+            if(sent2[0] = vows[l]) start_with_vow2++;
+        }
+    }
+    
+    if (start_with_vow1 > start_with_vow2) return 1;
+    else if (start_with_vow1 == start_with_vow2) return 0;
+    else if (start_with_vow1 < start_with_vow2) return -1;
     
 }
+ 
+
  
 int main(){
     
