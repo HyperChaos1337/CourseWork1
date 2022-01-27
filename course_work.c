@@ -100,31 +100,36 @@ struct Text readText(){
     
 }
 
-char get_garbage(struct Sentence *sent){
+void get_garbage(struct Sentence *sent){
     
-    char result;
+    int len = strlen(sent -> str);
     int k = 0;
-    for(int m = 0; m < strlen(sent -> str); m++){
-        if(tolower(sent -> str[m]) == 'g' &&
+    for(int m = 0; m < len; m++){
+        if (tolower(sent -> str[m]) == 'g' &&
         tolower(sent -> str[m+1]) == 'a' &&
         tolower(sent -> str[m+2]) == 'r' &&
         tolower(sent -> str[m+3]) == 'b' &&
         tolower(sent -> str[m+4]) == 'a' &&
         tolower(sent -> str[m+5]) == 'g' &&
-        tolower(sent -> str[m+6]) == 'e') k += 1;
+        tolower(sent -> str[m+6]) == 'e') k++;
         }
-        if (k == 0){
-            result = "Clean!";
-        }
-        else if (k >= 1 && k <= 5){
-            result = "Must be washed";
-        }
-        else if (k > 5){
-            result = "It is a dump";
-        }
-    return result;
-}
+        if (k == 0) printf("Clean!");
+        else if (k >= 1 && k <= 5) printf("Must be washed");
+        else if (k > 5) printf("It is a dump");
     
+}
+
+int compare(const void *a, const void *b){
+    
+    char vows[12] = ['A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'];
+    char sent1;
+    chat sent2;
+    
+    int start_with_vow1 = 0;
+    int start_with_vow2 = 0;
+    
+    
+}
  
 int main(){
     
@@ -135,10 +140,19 @@ int main(){
     puts("2. Замена на входное предложение всех цифр в тексте");
     puts("3. Удалить предложения с 3-мя идущими подряд буквами в верхнем регистре");
     puts("4. Отсортировать по уменьшению количества слов начинающихся с гласной буквы\n");
+    int a;
+    scanf("%d", &a);
     for(int j = 0; text.count; j++){
         puts(text.sents[j] -> str);
     }
     
+    switch(a){
+        case 1:
+        for(int j = 0; text.count; j++){
+            get_garbage(text.sents[j]);
+        }
+        
+    }
+    
     return 0;
- 
 }
