@@ -100,7 +100,7 @@ struct Text readText(){
     
 }
 
-void get_garbage(struct Sentence *sent){
+void get_garbage(struct Sentence *sent){ //Функция 1
     
     int len = strlen(sent -> str);
     int k = 0;
@@ -119,7 +119,7 @@ void get_garbage(struct Sentence *sent){
     
 }
 
-int compare(const void * a, const void * b){
+int compare(const void * a, const void * b){ //Функция 4
     
     char vows[12] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
     
