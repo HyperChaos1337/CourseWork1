@@ -4,6 +4,8 @@
 #include <ctype.h>
  
 #define step 5
+#define N 6
+#define M 12
  
 //Создание структуры строки
  
@@ -104,7 +106,7 @@ void get_garbage(struct Sentence *sent){ //Функция 1
     
     int len = strlen(sent -> str);
     int k = 0;
-    for(int m = 0; m < len; m++){
+    for(int m = 0; m < len-6; m++){
         if (tolower(sent -> str[m]) == 'g' &&
         tolower(sent -> str[m+1]) == 'a' &&
         tolower(sent -> str[m+2]) == 'r' &&
@@ -113,15 +115,28 @@ void get_garbage(struct Sentence *sent){ //Функция 1
         tolower(sent -> str[m+5]) == 'g' &&
         tolower(sent -> str[m+6]) == 'e') k++;
         }
-        if (k == 0) printf("Clean!");
-        else if (k >= 1 && k <= 5) printf("Must be washed");
-        else if (k > 5) printf("It is a dump");
+        if (k == 0) printf("%s", "Clean!");
+        else if (k >= 1 && k <= 5) printf("%s", "Must be washed");
+        else if (k > 5) printf("%s", "It is a dump");
     
+}
+
+int vowels_in_a_row(struct Sentence *sent){ //Функция 3
+    
+    char cap_vows[N] = {'A', 'E', 'I', 'O', 'U', 'Y'};
+    for(int i = 0; i < strlen(sent -> str)-2; i++){
+        for(int j = 0; j < N; j++){
+            if (sent[i] == cap_vows[j] &&
+            sent[i+1] == cap_vows[j] &&
+            sent[i+2] == cap_vows[j]) return 1;
+        }
+    }
+    return 0;
 }
 
 int compare(const void * a, const void * b){ //Функция 4
     
-    char vows[12] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
     
     char **snt1 = (char**) a;
     char **snt2 = (char**) b;
@@ -133,13 +148,13 @@ int compare(const void * a, const void * b){ //Функция 4
     char * sent2 = *snt2;
     
     for (int k = 0; k < strlen(sent1); k++){
-        for (int l = 0; l < 12; l++){
+        for (int l = 0; l < M; l++){
             if(sent1[0] = vows[l]) start_with_vow1++;
         }
     }
     
     for (int k = 0; k < strlen(sent2); k++){
-        for (int l = 0; l < 12; l++){
+        for (int l = 0; l < M; l++){
             if(sent2[0] = vows[l]) start_with_vow2++;
         }
     }
@@ -168,11 +183,11 @@ int main(){
     }
     
     switch(a){
-        case 1:
-        for(int j = 0; text.count; j++){
+        case (1):
+        for(int j = 0; j < text.count; j++){
             get_garbage(text.sents[j]);
         }
-        
+        break;
     }
     
     return 0;
