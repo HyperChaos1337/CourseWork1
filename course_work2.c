@@ -157,13 +157,15 @@ int compare(const void * a, const void * b){ //Функция 4
     char * sent1 = *snt1;
     char * sent2 = *snt2;
     
-    for (int k = 0; k < strlen(sent1); k++){
+    int k;
+    
+    for (k = 0; k < strlen(sent1); k++){
         for (int l = 0; l < M; l++){
             if(sent1[0] = vows[l]) start_with_vow1++;
         }
     }
     
-    for (int k = 0; k < strlen(sent2); k++){
+    for (k = 0; k < strlen(sent2); k++){
         for (int l = 0; l < M; l++){
             if(sent2[0] = vows[l]) start_with_vow2++;
         }
@@ -175,8 +177,29 @@ int compare(const void * a, const void * b){ //Функция 4
     
 }
  
+void sorting(struct Text *txt){ //Функция 4(продолжение)
+    
+    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    int x;
+    
+    for(x = 0; x < txt->count; x++){
+        
+        char *s = txt->sents[x]->str;
+        int count = txt->sents[x]->m;
+        int k = 0;
+        for(int y = 0; y < M; y++){
+            if (s[0] == vows[y]) k++;
+        }
+    qsort(txt->sents, txt->count, sizeof(struct Sentence*), compare);
+    for(x = 0; x < txt->count; x++){
+        struct Sentence *s = txt->sents[x];
+        printf("%s\n", s->str);
+    }
+    
+}
 
- 
+    
+} 
 int main(){
     
     puts("Введите текст. По окончании ввода нажмите клавишу Enter дважды: ");
@@ -194,16 +217,19 @@ int main(){
     
     switch(a){
         case(1):
-        get_garbage(&text);
-        break;
+            get_garbage(&text);
+            break;
         case(3):
-        for(int j = 0; j < text.count; j++){
-            if (cap_lets_in_a_row(text.sents[j])){
-                clear_cap_lets(&text, j);
-                j--;
+            for(int j = 0; j < text.count; j++){
+                if (cap_lets_in_a_row(text.sents[j])){
+                    clear_cap_lets(&text, j);
+                    j--;
+                }
             }
-        }
-        break;
+            break;
+        case(4):
+            sorting(&text);
+            break;
     }
     
     return 0;
