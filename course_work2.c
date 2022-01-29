@@ -103,24 +103,43 @@ struct Text readText(){
     
 }
 
-void get_garbage(struct Text *txt){ //Функция 1
-    
-    for(int x = 0; x < txt->count; x++){
-        char *s = txt->sents[x]->str;
-        int count = txt->sents[x]->m;
-        int k = 0;
-        for(int j = 0; j < count-6; j++){
-            if(tolower(s[j]) == 'g' &&
-            tolower(s[j+1]) == 'a' &&
-            tolower(s[j+2]) == 'r' &&
-            tolower(s[j+3]) == 'b' &&
-            tolower(s[j+4]) == 'a' &&
-            tolower(s[j+5]) == 'g' &&
-            tolower(s[j+6]) == 'e') k += 1;
-        }
-        if (k == 0) puts("Clear!");
-        else if (k >= 1 && k <= 5) puts("Must be washed");
-        else if (k > 5) puts("It is a dump");
+void get_garbage(struct Text txt){ //Функция 1
+    int p=0;
+    for(int x = 0; x < txt.count; x++) {
+            char *s = txt.sents[x]->str;
+            int count = txt.sents[x]->m;
+            int k = 0;
+            if (p!=0) {
+                for (int j = 0; j < count - 8; j++) {
+                    if (tolower(s[j]) == ' ' &&
+                        tolower(s[j + 1]) == 'g' &&
+                        tolower(s[j + 2]) == 'a' &&
+                        tolower(s[j + 3]) == 'r' &&
+                        tolower(s[j + 4]) == 'b' &&
+                        tolower(s[j + 5]) == 'a' &&
+                        tolower(s[j + 6]) == 'g' &&
+                        tolower(s[j + 7]) == 'e' &&
+                        (tolower(s[j + 8]) == ' ' || (s[j + 8]) == '.' || (s[j + 8]) == ','))
+                        k += 1;
+                }
+            }
+            else {
+                for (int j = 0; j < count - 7; j++) {
+                    if (tolower(s[j]) == 'g' &&
+                        tolower(s[j + 1]) == 'a' &&
+                        tolower(s[j + 2]) == 'r' &&
+                        tolower(s[j + 3]) == 'b' &&
+                        tolower(s[j + 4]) == 'a' &&
+                        tolower(s[j + 5]) == 'g' &&
+                        tolower(s[j + 6]) == 'e' &&
+                        (tolower(s[j + 7]) == ' ' || (s[j + 7]) == '.' || (s[j + 7]) == ','))
+                        k += 1;
+                }
+            }
+            if (k == 0) puts("Clear!");
+            else if (k >= 1 && k <= 5) puts("Must be washed");
+            else if (k > 5) puts("It is a dump");
+            p=1;
     }
 }
 
@@ -211,13 +230,10 @@ int main(){
     puts("4. Отсортировать по уменьшению количества слов начинающихся с гласной буквы\n");
     int a;
     scanf("%d", &a);
-    for(int j = 0; text.count; j++){
-        puts(text.sents[j] -> str);
-    }
     
     switch(a){
         case(1):
-            get_garbage(&text);
+            get_garbage(text);
             break;
         case(3):
             for(int j = 0; j < text.count; j++){
@@ -230,6 +246,10 @@ int main(){
         case(4):
             sorting(&text);
             break;
+    }
+    
+    for(int j = 0; text.count; j++){
+        puts(text.sents[j] -> str);
     }
     
     return 0;
