@@ -134,7 +134,7 @@ int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     return 0;
 }
 
-void clear_cap_lets(struct Text *txt, int c){
+void clear_cap_lets(struct Text *txt, int c){ //Функция 3(продолжение)
     for (int x = c; x < txt->count-1; x++){
         memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
     }
@@ -177,7 +177,7 @@ int compare(const void * a, const void * b){ //Функция 4
     
 }
  
-void sorting(struct Text *txt){
+void sorting(struct Text *txt){ //Функция 4(продолжение)
     
     char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
     int x;
