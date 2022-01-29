@@ -130,7 +130,7 @@ int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     return 0;
 }
 
-void clear_cap_lets(struct Text *txt, int c){
+void clear_cap_lets(struct Text *txt, int c){ //Функция 3(продолжение)
     for (int x = c; x < txt->count-1; x++){
         memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
     }
@@ -189,16 +189,16 @@ int main(){
     }
     
     switch(a){
-        case(1):
+        case(1): //Вызов функции 1
         for(int j = 0; j < text.count; j++){
-            get_garbage(text.sents[j]);
+            get_garbage(text.sents[j]); 
         }
         break;
-        case(3):
+        case(3):  //Вызов функции 3
         for(int j = 0; j < text.count; j++){
             if (cap_lets_in_a_row(text.sents[j])){
                 clear_cap_lets(&text, j);
-                j--;
+                j--;  
             }
         }
         break;
