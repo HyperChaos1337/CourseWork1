@@ -10,6 +10,7 @@
  
 struct Sentence{
     
+    int m; //Количество символов
     int size; // Размер буфера
     char *str;
     
@@ -45,8 +46,9 @@ struct Sentence* readSentence(){
     buffer[i] = '\0';
     
     struct Sentence *sentence = malloc(sizeof(struct Sentence));
-    sentence -> str = buffer;
-    sentence -> size = size;
+    sentence->str = buffer;
+    sentence->size = size;
+    sentence->m = i; 
     
     return sentence;
     
@@ -101,23 +103,25 @@ struct Text readText(){
     
 }
 
-void get_garbage(struct Sentence *sent){ //Функция 1
+void get_garbage(struct Text *txt){ //Функция 1
     
-    int len = strlen(sent -> str);
-    int k = 0;
-    for(int m = 0; m < len-6; m++){
-        if (tolower(sent->str[m]) == 'g' &&
-        tolower(sent->str[m+1]) == 'a' &&
-        tolower(sent->str[m+2]) == 'r' &&
-        tolower(sent->str[m+3]) == 'b' &&
-        tolower(sent->str[m+4]) == 'a' &&
-        tolower(sent->str[m+5]) == 'g' &&
-        tolower(sent->str[m+6]) == 'e') k++;
+    for(int x = 0; x < txt->count; x++){
+        char *s = txt->sents[x]->str;
+        int len = strlen(txt->sents[x]->str);
+        int k = 0;
+        for(int j = 0; j < len-6; j++){
+            if(tolower(s[j]) == 'g' &&
+            tolower(s[j+1]) == 'a' &&
+            tolower(s[j+2]) == 'r' &&
+            tolower(s[j+3]) == 'b' &&
+            tolower(s[j+4]) == 'a' &&
+            tolower(s[j+5]) == 'g' &&
+            tolower(s[j+6]) == 'e') k += 1;
         }
-        if (k == 0) printf("%s", "Clean!");
-        else if (k >= 1 && k <= 5) printf("%s", "Must be washed");
-        else if (k > 5) printf("%s", "It is a dump");
-    
+        if (k == 0) puts("Clear!");
+        else if (k >= 1 && k <= 5) puts("Must be washed");
+        else if (k > 5) puts("It is a dump");
+    }
 }
 
 int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
@@ -130,7 +134,7 @@ int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     return 0;
 }
 
-void clear_cap_lets(struct Text *txt, int c){ //Функция 3(продолжение)
+void clear_cap_lets(struct Text *txt, int c){
     for (int x = c; x < txt->count-1; x++){
         memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
     }
@@ -153,13 +157,15 @@ int compare(const void * a, const void * b){ //Функция 4
     char * sent1 = *snt1;
     char * sent2 = *snt2;
     
-    for (int k = 0; k < strlen(sent1); k++){
+    int k;
+    
+    for (k = 0; k < strlen(sent1); k++){
         for (int l = 0; l < M; l++){
             if(sent1[0] = vows[l]) start_with_vow1++;
         }
     }
     
-    for (int k = 0; k < strlen(sent2); k++){
+    for (k = 0; k < strlen(sent2); k++){
         for (int l = 0; l < M; l++){
             if(sent2[0] = vows[l]) start_with_vow2++;
         }
@@ -171,8 +177,29 @@ int compare(const void * a, const void * b){ //Функция 4
     
 }
  
+void sorting(struct Text *txt){
+    
+    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    int x;
+    
+    for(x = 0; x < txt->count; x++){
+        
+        char *s = txt->sents[x]->str;
+        int count = txt->sents[x]->m;
+        int k = 0;
+        for(int y = 0; y < M; y++){
+            if (s[0] == vows[y]) k++;
+        }
+    qsort(txt->sents, txt->count, sizeof(struct Sentence*), compare);
+    for(x = 0; x < txt->count; x++){
+        struct Sentence *s = txt->sents[x];
+        printf("%s\n", s->str);
+    }
+    
+}
 
- 
+    
+} 
 int main(){
     
     puts("Введите текст. По окончании ввода нажмите клавишу Enter дважды: ");
@@ -189,19 +216,20 @@ int main(){
     }
     
     switch(a){
-        case(1): //Вызов функции 1
-        for(int j = 0; j < text.count; j++){
-            get_garbage(text.sents[j]); 
-        }
-        break;
-        case(3):  //Вызов функции 3
-        for(int j = 0; j < text.count; j++){
-            if (cap_lets_in_a_row(text.sents[j])){
-                clear_cap_lets(&text, j);
-                j--;  
+        case(1):
+            get_garbage(&text);
+            break;
+        case(3):
+            for(int j = 0; j < text.count; j++){
+                if (cap_lets_in_a_row(text.sents[j])){
+                    clear_cap_lets(&text, j);
+                    j--;
+                }
             }
-        }
-        break;
+            break;
+        case(4):
+            sorting(&text);
+            break;
     }
     
     return 0;
