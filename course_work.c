@@ -4,7 +4,6 @@
 #include <ctype.h>
  
 #define step 5
-#define N 6
 #define M 12
  
 //Создание структуры строки
@@ -107,13 +106,13 @@ void get_garbage(struct Sentence *sent){ //Функция 1
     int len = strlen(sent -> str);
     int k = 0;
     for(int m = 0; m < len-6; m++){
-        if (tolower(sent -> str[m]) == 'g' &&
-        tolower(sent -> str[m+1]) == 'a' &&
-        tolower(sent -> str[m+2]) == 'r' &&
-        tolower(sent -> str[m+3]) == 'b' &&
-        tolower(sent -> str[m+4]) == 'a' &&
-        tolower(sent -> str[m+5]) == 'g' &&
-        tolower(sent -> str[m+6]) == 'e') k++;
+        if (tolower(sent->str[m]) == 'g' &&
+        tolower(sent->str[m+1]) == 'a' &&
+        tolower(sent->str[m+2]) == 'r' &&
+        tolower(sent->str[m+3]) == 'b' &&
+        tolower(sent->str[m+4]) == 'a' &&
+        tolower(sent->str[m+5]) == 'g' &&
+        tolower(sent->str[m+6]) == 'e') k++;
         }
         if (k == 0) printf("%s", "Clean!");
         else if (k >= 1 && k <= 5) printf("%s", "Must be washed");
@@ -121,17 +120,24 @@ void get_garbage(struct Sentence *sent){ //Функция 1
     
 }
 
-int vowels_in_a_row(struct Sentence *sent){ //Функция 3
+int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     
-    char cap_vows[N] = {'A', 'E', 'I', 'O', 'U', 'Y'};
-    for(int i = 0; i < strlen(sent -> str)-2; i++){
-        for(int j = 0; j < N; j++){
-            if (sent[i] == cap_vows[j] &&
-            sent[i+1] == cap_vows[j] &&
-            sent[i+2] == cap_vows[j]) return 1;
-        }
+    for(int x = 0; x < strlen(sent->str)-2; x++){
+            if (sent->str[x] == toupper(sent->str[x]) &&
+            sent->str[x+1] == toupper(sent->str[x+1]) &&
+            sent->str[x+2] == toupper(sent->str[x+2])) return 1;
     }
     return 0;
+}
+
+void clear_cap_lets(struct Text *txt, int c){
+    for (int x = c; x < txt->count-1; x++){
+        memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
+    }
+    free(txt->sents[txt->count]);
+    
+    txt->count -= 1;
+    txt->size -= 1; 
 }
 
 int compare(const void * a, const void * b){ //Функция 4
@@ -183,9 +189,17 @@ int main(){
     }
     
     switch(a){
-        case (1):
+        case(1):
         for(int j = 0; j < text.count; j++){
             get_garbage(text.sents[j]);
+        }
+        break;
+        case(3):
+        for(int j = 0; j < text.count; j++){
+            if (cap_lets_in_a_row(text.sents[j])){
+                clear_cap_lets(&text, j);
+                j--;
+            }
         }
         break;
     }
