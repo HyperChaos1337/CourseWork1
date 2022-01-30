@@ -10,7 +10,7 @@
  
 struct Sentence{
     
-    int vow;
+    int vow; //Количество гласных букв
     int m; //Количество символов
     int size; // Размер буфера
     char *str;
@@ -146,24 +146,41 @@ void get_garbage(struct Text txt){ //Функция 1
     }
 }
 
-int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
+int cap_lets_in_a_row(char *sent){ //Функция 3
     
-    for(int x = 0; x < strlen(sent->str)-2; x++){
-            if (sent->str[x] == toupper(sent->str[x]) &&
-            sent->str[x+1] == toupper(sent->str[x+1]) &&
-            sent->str[x+2] == toupper(sent->str[x+2])) return 1;
+    int len = strlen(sent);
+    
+    for(int x = 0; x < len-2; x++){
+        if ((sent[x] >= 'A' && sent[x] <= 'Z') &&
+        (sent[x+1] >= 'A' && sent[x+2] <= 'Z') &&
+        (sent[x+2] >= 'A' && sent[x+2] <= 'Z')) return 1;
     }
+    
     return 0;
+    
 }
 
-void clear_cap_lets(struct Text *txt, int c){
-    for (int x = c; x < txt->count-1; x++){
-        memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
-    }
-    free(txt->sents[txt->count]);
+void delCapSent(struct Text txt){  //Функция 3(продолжение)
     
-    txt->count -= 1;
-    txt->size -= 1; 
+    int x = 0;
+    int flag = 0;
+    int count = txt.count;
+    
+    while(x < count){
+        char *s = txt.sents[x]->str;
+        for(int y = 0; y < count; y++){
+            if(cap_lets_in_a_row(txt.sents[y]->str)) flag = 1;
+        }
+        if (flag = 1){
+            memmove(txt.sents+x, txt.sents+x+1, (txt.count-x)*sizeof(txt.sents));
+            txt.count--;
+        }
+        else x++;
+    }
+    for (x = 0; x < txt.count; x++){
+        struct Sentence *s = txt.sents[x];
+        printf("%s\n", s->str);
+    }
 }
 
 int compare(const void * a, const void * b){ //Функция 4
@@ -223,15 +240,10 @@ int main(){
         case(1):
             puts("Результат:");
             get_garbage(text);
-            puts("\n");
             break;
         case(3):
-            for(int j = 0; j < text.count; j++){
-                if (cap_lets_in_a_row(text.sents[j])){
-                    clear_cap_lets(&text, j);
-                    j--;
-                }
-            }
+            puts("Результат:");
+            delCapSent(text);
             break;
         case(4):
             puts("Результат:");
