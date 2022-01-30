@@ -160,7 +160,7 @@ int cap_lets_in_a_row(char *sent){ //Функция 3
     
 }
 
-void delCapSent(struct Text txt){  //Функция 3(продолжение)
+void delCapSent(struct Text txt){
     
     int x = 0;
     int flag = 0;
