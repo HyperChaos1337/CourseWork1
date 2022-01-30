@@ -10,6 +10,7 @@
  
 struct Sentence{
     
+    int vow;
     int m; //Количество символов
     int size; // Размер буфера
     char *str;
@@ -40,6 +41,7 @@ struct Sentence* readSentence(){
             size += step;
         }
         tmp = getchar();
+        if (i == 0 && tmp == ' ') continue;
         buffer[i] = tmp;
         i++;
     }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
@@ -49,6 +51,7 @@ struct Sentence* readSentence(){
     sentence->str = buffer;
     sentence->size = size;
     sentence->m = i; 
+    sentence->vow = 0;
     
     return sentence;
     
@@ -103,24 +106,43 @@ struct Text readText(){
     
 }
 
-void get_garbage(struct Text *txt){ //Функция 1
-    
-    for(int x = 0; x < txt->count; x++){
-        char *s = txt->sents[x]->str;
-        int len = strlen(txt->sents[x]->str);
-        int k = 0;
-        for(int j = 0; j < len-6; j++){
-            if(tolower(s[j]) == 'g' &&
-            tolower(s[j+1]) == 'a' &&
-            tolower(s[j+2]) == 'r' &&
-            tolower(s[j+3]) == 'b' &&
-            tolower(s[j+4]) == 'a' &&
-            tolower(s[j+5]) == 'g' &&
-            tolower(s[j+6]) == 'e') k += 1;
-        }
-        if (k == 0) puts("Clear!");
-        else if (k >= 1 && k <= 5) puts("Must be washed");
-        else if (k > 5) puts("It is a dump");
+void get_garbage(struct Text txt){ //Функция 1
+    int p=0;
+    for(int x = 0; x < txt.count; x++) {
+            char *s = txt.sents[x]->str;
+            int count = txt.sents[x]->m;
+            int k = 0;
+            if (p!=0) {
+                for (int j = 0; j < count - 8; j++) {
+                    if (tolower(s[j]) == ' ' &&
+                        tolower(s[j + 1]) == 'g' &&
+                        tolower(s[j + 2]) == 'a' &&
+                        tolower(s[j + 3]) == 'r' &&
+                        tolower(s[j + 4]) == 'b' &&
+                        tolower(s[j + 5]) == 'a' &&
+                        tolower(s[j + 6]) == 'g' &&
+                        tolower(s[j + 7]) == 'e' &&
+                        (tolower(s[j + 8]) == ' ' || (s[j + 8]) == '.' || (s[j + 8]) == ','))
+                        k += 1;
+                }
+            }
+            else {
+                for (int j = 0; j < count - 7; j++) {
+                    if (tolower(s[j]) == 'g' &&
+                        tolower(s[j + 1]) == 'a' &&
+                        tolower(s[j + 2]) == 'r' &&
+                        tolower(s[j + 3]) == 'b' &&
+                        tolower(s[j + 4]) == 'a' &&
+                        tolower(s[j + 5]) == 'g' &&
+                        tolower(s[j + 6]) == 'e' &&
+                        (tolower(s[j + 7]) == ' ' || (s[j + 7]) == '.' || (s[j + 7]) == ','))
+                        k += 1;
+                }
+            }
+            if (k == 0) puts("Clear!");
+            else if (k >= 1 && k <= 5) puts("Must be washed");
+            else if (k > 5) puts("It is a dump");
+            p=1;
     }
 }
 
@@ -134,7 +156,7 @@ int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     return 0;
 }
 
-void clear_cap_lets(struct Text *txt, int c){ //Функция 3(продолжение)
+void clear_cap_lets(struct Text *txt, int c){
     for (int x = c; x < txt->count-1; x++){
         memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
     }
@@ -146,60 +168,44 @@ void clear_cap_lets(struct Text *txt, int c){ //Функция 3(продолж�
 
 int compare(const void * a, const void * b){ //Функция 4
     
-    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    struct Sentence **sent1 = (struct Sentence**) a;
+    struct Sentence **sent2 = (struct Sentence**) b;
     
-    char **snt1 = (char**) a;
-    char **snt2 = (char**) b;
+    int start_with_vow1 = (*sent1)->vow;
+    int start_with_vow2 = (*sent2)->vow;
     
-    int start_with_vow1 = 0;
-    int start_with_vow2 = 0;
-    
-    char * sent1 = *snt1;
-    char * sent2 = *snt2;
-    
-    int k;
-    
-    for (k = 0; k < strlen(sent1); k++){
-        for (int l = 0; l < M; l++){
-            if(sent1[0] = vows[l]) start_with_vow1++;
-        }
-    }
-    
-    for (k = 0; k < strlen(sent2); k++){
-        for (int l = 0; l < M; l++){
-            if(sent2[0] = vows[l]) start_with_vow2++;
-        }
-    }
-    
-    if (start_with_vow1 > start_with_vow2) return 1;
-    else if (start_with_vow1 == start_with_vow2) return 0;
-    else if (start_with_vow1 < start_with_vow2) return -1;
-    
-}
- 
-void sorting(struct Text *txt){ //Функция 4(продолжение)
-    
-    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
-    int x;
-    
-    for(x = 0; x < txt->count; x++){
-        
-        char *s = txt->sents[x]->str;
-        int count = txt->sents[x]->m;
-        int k = 0;
-        for(int y = 0; y < M; y++){
-            if (s[0] == vows[y]) k++;
-        }
-    qsort(txt->sents, txt->count, sizeof(struct Sentence*), compare);
-    for(x = 0; x < txt->count; x++){
-        struct Sentence *s = txt->sents[x];
-        printf("%s\n", s->str);
-    }
+    return start_with_vow2-start_with_vow1;
     
 }
 
+void sorting(struct Text txt){ //Функция 4(продолжение)
+
+    char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
+    int x,k;
+ 
+    for(x = 0; x < txt.count; x++){
+        k=0;
+        char *s = txt.sents[x]->str;
+        int count = txt.sents[x]->m;
+        for (int j=0;j<count;j++){
+            if (s[j]==' ') k=0;
+            else k++;
+            if (k==1){
+                for(int y = 0; y < M; y++){
+                    if (s[j] == vows[y])
+                        txt.sents[x]->vow++;
+                }
+            }
+        }
+    }
+    qsort(txt.sents, txt.count, sizeof(struct Sentence*), compare);
+    for (x = 0; x < txt.count; x++){
+        struct Sentence *s = txt.sents[x];
+        printf("%s\n", s->str);
+    }
+}
+
     
-} 
 int main(){
     
     puts("Введите текст. По окончании ввода нажмите клавишу Enter дважды: ");
@@ -208,16 +214,16 @@ int main(){
     puts("1. Вывести количество слов 'garbage' и результат");
     puts("2. Замена на входное предложение всех цифр в тексте");
     puts("3. Удалить предложения с 3-мя идущими подряд буквами в верхнем регистре");
-    puts("4. Отсортировать по уменьшению количества слов начинающихся с гласной буквы\n");
+    puts("4. Отсортировать по уменьшению количества слов начинающихся с гласной буквы");
+    puts("5. Выйти из программы\n");
     int a;
     scanf("%d", &a);
-    for(int j = 0; text.count; j++){
-        puts(text.sents[j] -> str);
-    }
     
     switch(a){
         case(1):
-            get_garbage(&text);
+            puts("Результат:");
+            get_garbage(text);
+            puts("\n");
             break;
         case(3):
             for(int j = 0; j < text.count; j++){
@@ -228,9 +234,22 @@ int main(){
             }
             break;
         case(4):
-            sorting(&text);
+            puts("Результат:");
+            sorting(text);
+            break;
+        case(5):
+            puts("Пользователь запросил выход из программы");
+            break;
+        default:
+            puts("Нет такой команды!");
             break;
     }
+    
+    for(int j = 0; text.count; j++){
+        free(text.sents[j]);
+    }
+    
+    free(text.sents);
     
     return 0;
 }
