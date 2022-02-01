@@ -146,41 +146,37 @@ void get_garbage(struct Text txt){ //Функция 1
     }
 }
 
-int cap_lets_in_a_row(char *sent){ //Функция 3
+int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     
-    int len = strlen(sent);
+    int len = strlen(sent->str);
     
     for(int x = 0; x < len-2; x++){
-        if ((sent[x] >= 'A' && sent[x] <= 'Z') &&
-        (sent[x+1] >= 'A' && sent[x+2] <= 'Z') &&
-        (sent[x+2] >= 'A' && sent[x+2] <= 'Z')) return 1;
+        if ((sent->str[x] >= 'A' && sent->str[x] <= 'Z') &&
+        (sent->str[x+1] >= 'A' && sent->str[x+1] <= 'Z') &&
+        (sent->str[x+2] >= 'A' && sent->str[x+2] <= 'Z')) return 1;
     }
     
     return 0;
+}
+
+void removeSent(struct Text *txt, int cap_lets){
+    
+    free(txt->sents[cap_lets]->str);
+    
+    for(int x = cap_lets; txt->count-1; x++){
+        memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
+    }
+    
+    free(txt->sents[txt->count]);
+    txt->count--;
+    txt->size--;
     
 }
 
-void delCapSent(struct Text txt){
+void delSent(struct Text *txt){
     
-    int x = 0;
-    int flag = 0;
-    int count = txt.count;
     
-    while(x < count){
-        char *s = txt.sents[x]->str;
-        for(int y = 0; y < count; y++){
-            if(cap_lets_in_a_row(txt.sents[y]->str)) flag = 1;
-        }
-        if (flag = 1){
-            memmove(txt.sents+x, txt.sents+x+1, (txt.count-x)*sizeof(txt.sents));
-            txt.count--;
-        }
-        else x++;
-    }
-    for (x = 0; x < txt.count; x++){
-        struct Sentence *s = txt.sents[x];
-        printf("%s\n", s->str);
-    }
+    
 }
 
 int compare(const void * a, const void * b){ //Функция 4
@@ -243,7 +239,7 @@ int main(){
             break;
         case(3):
             puts("Результат:");
-            delCapSent(text);
+            delSent(&text);
             break;
         case(4):
             puts("Результат:");
