@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,13 +7,6 @@
 #define M 12
  
 //Создание структуры строки
-
-struct NewSentence{
-    
-    int size1;
-    char *str1;
-    
-};
  
 struct Sentence{
     
@@ -159,42 +151,63 @@ void get_garbage(struct Text txt){ //Функция 1
     }
 }
 
-struct NewSentence* new_sent(){
+int sent_end(char sym) {
+    if (sym == '\n')
+        return 0;
+    return 1;
+}
+
+
+char *new_sent_in(){
     
-    int size = step;
-    char *buffer = malloc(sizeof(char)*step);
-    char tmp;
     int i = 0;
-    
-    do{
-        if(i >= size - 2){
-            char *t = realloc(buffer, size + step); //Увеличение памяти в случае, если осталось 2 свободные ячейки
-            if (!t){
-                return NULL;
-            }
-            buffer = t;
-            size += step;
+    int size = step * sizeof(char);
+    char *sent = malloc(size);
+    char sym;
+    int flag = 0;
+    do {
+        sym = getchar();
+        if (flag == 0 && sym >= 33) {
+            flag = 1;
         }
-        tmp = getchar();
-        if (i == 0 && tmp == ' ') continue;
-        buffer[i] = tmp;
-        i++;
-    }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
-    buffer[i] = tmp;
-    buffer[i+1] = '\0';
-    
-    struct NewSentence *new_sentence = malloc(sizeof(struct NewSentence));
-    
-    new_sentence->str1 = buffer;
-    new_sentence->size1 = size;
-    
-    return new_sentence;
+        if (flag == 1) {
+            sent[i] = sym;
+            i++;
+            size += step * sizeof(char);
+            sent = realloc(sent, size);
+        }
+    } while (sent_end(sym));
+    sent[i] = '\0';
+    return sent;
     
 }
 
-void new_sent_input(){
+void new_sent_out(){
+    new_sent_in();
+}
+
+void replace_digits(struct Text txt){
     
-    struct NewSentence
+    char *st = new_sent_in();
+    
+    for(int x = 0; x < txt.count; x++){
+        
+        char *s = txt.sents[x]->str;
+        int y = 0;
+        while(y < txt.sents[x]->m){
+            if isdigit(s[y]){
+                s = realloc(s, (txt.sents[x]->size+strlen(st))*sizeof(char));
+                txt.sents[x]->str += strlen(st);
+                memmove(txt.sents[x]->str+y+strlen(st), txt.sents[x]->str, (txt.sents[x]->m)-y);
+                }
+            else y++;
+            }
+        }
+    
+    for (int x = 0; x < txt.count; x++){
+        struct Sentence *s = txt.sents[x];
+        printf("%s\n", s->str);
+    }
     
 }
 
@@ -291,10 +304,10 @@ int main(){
             get_garbage(text);
             break;
         case(2):
-            puts("Введите новую строку:\n");
-            struct NewSentence *s = new_sent();
-            puts(s->str1);
-            free(s->str1);
+            puts("Введите новую строку:");
+            new_sent_in();
+            new_sent_out();
+            replace_digits(text);
             break;
         case(3):
             puts("Результат:");
