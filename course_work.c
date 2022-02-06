@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +8,13 @@
 #define M 12
  
 //Создание структуры строки
+
+struct NewSentence{
+    
+    int size1;
+    char *str1;
+    
+};
  
 struct Sentence{
     
@@ -151,6 +159,45 @@ void get_garbage(struct Text txt){ //Функция 1
     }
 }
 
+struct NewSentence* new_sent(){
+    
+    int size = step;
+    char *buffer = malloc(sizeof(char)*step);
+    char tmp;
+    int i = 0;
+    
+    do{
+        if(i >= size - 2){
+            char *t = realloc(buffer, size + step); //Увеличение памяти в случае, если осталось 2 свободные ячейки
+            if (!t){
+                return NULL;
+            }
+            buffer = t;
+            size += step;
+        }
+        tmp = getchar();
+        if (i == 0 && tmp == ' ') continue;
+        buffer[i] = tmp;
+        i++;
+    }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
+    buffer[i] = tmp;
+    buffer[i+1] = '\0';
+    
+    struct NewSentence *new_sentence = malloc(sizeof(struct NewSentence));
+    
+    new_sentence->str1 = buffer;
+    new_sentence->size1 = size;
+    
+    return new_sentence;
+    
+}
+
+void new_sent_input(){
+    
+    struct NewSentence
+    
+}
+
 int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     
     int len = strlen(sent->str);
@@ -242,6 +289,12 @@ int main(){
         case(1):
             puts("Результат:");
             get_garbage(text);
+            break;
+        case(2):
+            puts("Введите новую строку:\n");
+            struct NewSentence *s = new_sent();
+            puts(s->str1);
+            free(s->str1);
             break;
         case(3):
             puts("Результат:");
