@@ -37,7 +37,11 @@ struct Sentence* readSentence(){
     
     do{
         if(i >= size - 2){
-            buffer = realloc(buffer, size + step); //Увеличение памяти в случае, если осталось 2 свободные ячейки
+            char *t = realloc(buffer, size + step); //Увеличение памяти в случае, если осталось 2 свободные ячейки
+            if (!t){
+                return NULL;
+            }
+            buffer = t;
             size += step;
         }
         tmp = getchar();
@@ -45,7 +49,8 @@ struct Sentence* readSentence(){
         buffer[i] = tmp;
         i++;
     }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
-    buffer[i] = '\0';
+    buffer[i] = tmp;
+    buffer[i+1] = '\0';
     
     struct Sentence *sentence = malloc(sizeof(struct Sentence));
     sentence->str = buffer;
@@ -150,32 +155,33 @@ int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
     
     int len = strlen(sent->str);
     
-    for(int x = 0; x < len-2; x++){
-        if ((sent->str[x] >= 'A' && sent->str[x] <= 'Z') &&
-        (sent->str[x+1] >= 'A' && sent->str[x+1] <= 'Z') &&
-        (sent->str[x+2] >= 'A' && sent->str[x+2] <= 'Z')) return 1;
+    for (int x = 0; x < len-2; x++){
+        if ((int)sent->str[x] >= 65 && (int)sent->str[x] <= 90){
+            if ((int)sent->str[x+1] >= 65 && (int)sent->str[x+1] <= 90){
+                if ((int)sent->str[x+2] >= 65 && (int)sent->str[x+2] <= 90) 
+                return 1;
+            }
+        }
     }
-    
+
     return 0;
+    
 }
 
 void removeSent(struct Text *txt, int cap_lets){
     
-    free(txt->sents[cap_lets]->str);
-    
-    for(int x = cap_lets; txt->count-1; x++){
+    for(int x = cap_lets; txt->count; x++){
         memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
     }
     
     free(txt->sents[txt->count]);
+    
     txt->count--;
     txt->size--;
     
 }
 
-void delSent(struct Text *txt){
-    
-    
+void delSent(struct Text txt){
     
 }
 
@@ -239,7 +245,16 @@ int main(){
             break;
         case(3):
             puts("Результат:");
-            delSent(&text);
+            for(int x = 0; x < text.count; x++){
+                if(cap_lets_in_a_row(text.sents[x])){
+                    removeSent(&text, x);
+                    x--;
+                }
+            }
+            
+            for(int x = 0; x < text.count; x++){
+                puts(text.sents[x]->str);
+            }
             break;
         case(4):
             puts("Результат:");
