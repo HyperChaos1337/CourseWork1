@@ -194,13 +194,11 @@ void replace_digits(struct Text txt){
         puts("\n");
         char *s = txt.sents[x]->str;
         int count = txt.sents[x]->m;
-        for(int y = 0; y < count; y++){
-            if(!isdigit(s[y])) printf("%c", s[y]);
-            if(isdigit(s[y])){
-                for(int z = 0; z < strlen(s_new); z++){
-                    printf("%c", s_new[z]);
-                }
-            }
+        int y = 0;
+        while (y < count){
+            if(isdigit(s[y])) printf("%s", s_new);
+            else if(!isdigit(s[y])) printf("%c", s[y]);
+            y++;
         }
     }  
 }    
