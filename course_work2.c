@@ -110,7 +110,8 @@ struct Text readText(){
     
 }
 
-void get_garbage(struct Text txt){ //Функция 1
+//Функция 1
+void get_garbage(struct Text txt){ 
     int p=0;
     for(int x = 0; x < txt.count; x++) {
             char *s = txt.sents[x]->str;
@@ -149,7 +150,9 @@ void get_garbage(struct Text txt){ //Функция 1
             p=1;
     }
 }
+//Конец функции 1
 
+//Функция 2
 int sent_end(char sym) {
     if (sym == '\n')
         return 0;
@@ -190,20 +193,24 @@ void replace_digits(struct Text txt){
     new_sent_out();
     char *s_new = new_sent_in();
     
-    for(int x = 0; x < txt.count; x++){
+    for(int x = 0; x < txt.count+1; x++){
         puts("\n");
         char *s = txt.sents[x]->str;
         int count = txt.sents[x]->m;
-        int y = 0;
-        while (y < count){
-            if(isdigit(s[y])) printf("%s", s_new);
-            else if(!isdigit(s[y])) printf("%c", s[y]);
-            y++;
-        }
-    }  
-}    
+        for(int y = 0; y < count; y++){
+            if(!isdigit(s[y])) printf("%c", s[y]);
+            else if(isdigit(s[y])){
+                for(int z = 0; z < strlen(s_new); z++){
+                    if (s_new[z] != '\n') printf("%c", s_new[z]);
+                    }
+                }
+            }
+        }  
+    }    
+// Конец функции 2
 
-int cap_lets_in_a_row(struct Sentence *sent){ //Функция 3
+// Функция 3
+int cap_lets_in_a_row(struct Sentence *sent){
     
     int len = strlen(sent->str);
     
@@ -228,7 +235,9 @@ void delSent(struct Text *txt){
     }
     
 }
+// Конец функции 3
 
+//Функция 4
 int compare(const void * a, const void * b){ //Функция 4
     
     struct Sentence **sent1 = (struct Sentence**) a;
@@ -267,7 +276,7 @@ void sorting(struct Text txt){ //Функция 4(продолжение)
         printf("%s\n", s->str);
     }
 }
-
+//Конец функции 4
     
 int main(){
     
