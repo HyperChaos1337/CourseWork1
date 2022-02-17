@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <locale.h>
  
 #define step 5
 #define M 12
@@ -41,15 +42,15 @@ struct Sentence* readSentence(){
             if (!t){
                 return NULL;
             }
-            buffer = t;
             size += step;
+            buffer = t;
         }
         tmp = getchar();
         if (i == 0 && tmp == ' ') continue;
         buffer[i] = tmp;
         i++;
     }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
-    buffer[i] = tmp;
+    buffer[i] = '\0';
     
     struct Sentence *sentence = malloc(sizeof(struct Sentence));
     sentence->str = buffer;
@@ -89,6 +90,14 @@ struct Text readText(){
     
     do{
         tmp = readSentence();
+        if (i >= size - 2){
+            struct Sentence **t = realloc(text, (size + step)*sizeof(struct Sentence*));
+            if (!t){
+                puts("Allocation error!");
+            }
+            text = t;
+            size += step;
+        }
         if (tmp -> str[0] == '\n'){
             lbcount++;
         }
@@ -280,6 +289,7 @@ void sorting(struct Text txt){ //Функция 4(продолжение)
     
 int main(){
     
+    setlocale(LC_ALL, "");
     puts("Введите текст. По окончании ввода нажмите клавишу Enter дважды: ");
     struct Text text = readText();
     puts("Выберите опцию:");
