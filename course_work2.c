@@ -74,7 +74,6 @@ int re_entry(struct Sentence **txt, struct Sentence *sent, int i){
     return 1;
 }
  
-//Работа с текстом
 struct Text readText(){
     
     int size = step;
