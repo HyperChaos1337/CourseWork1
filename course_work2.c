@@ -7,23 +7,19 @@
 #define step 5
 #define M 12
  
-//Создание структуры строки
- 
 struct Sentence{
     
-    int vow; //Количество гласных букв
-    int m; //Количество символов
-    int size; // Размер буфера
+    int vow; 
+    int m; в
+    int size; 
     char *str;
     
 };
  
-//Создание структуры текста
- 
 struct Text{
     
     struct Sentence **sents;
-    int count; // Количество предложений в тексте
+    int count;
     int size;
     
 };
