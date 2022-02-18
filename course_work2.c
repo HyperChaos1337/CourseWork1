@@ -201,7 +201,6 @@ void replace_digits(struct Text txt){
         }  
     }    
 
-// Функция 3
 int cap_lets_in_a_row(struct Sentence *sent){
     
     int len = strlen(sent->str);
@@ -227,7 +226,6 @@ void delSent(struct Text *txt){
     }
     
 }
-// Конец функции 3
 
 //Функция 4
 int compare(const void * a, const void * b){ //Функция 4
