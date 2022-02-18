@@ -227,8 +227,7 @@ void delSent(struct Text *txt){
     
 }
 
-//Функция 4
-int compare(const void * a, const void * b){ //Функция 4
+int compare(const void * a, const void * b){
     
     struct Sentence **sent1 = (struct Sentence**) a;
     struct Sentence **sent2 = (struct Sentence**) b;
@@ -240,7 +239,7 @@ int compare(const void * a, const void * b){ //Функция 4
     
 }
 
-void sorting(struct Text txt){ //Функция 4(продолжение)
+void sorting(struct Text txt){
 
     char vows[M] = {'A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'};
     int x,k;
@@ -266,7 +265,6 @@ void sorting(struct Text txt){ //Функция 4(продолжение)
         printf("%s\n", s->str);
     }
 }
-//Конец функции 4
     
 int main(){
     
