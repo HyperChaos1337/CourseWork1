@@ -152,7 +152,6 @@ void get_garbage(struct Text txt){
     }
 }
 
-//Функция 2
 int sent_end(char sym) {
     if (sym == '\n')
         return 0;
@@ -207,7 +206,6 @@ void replace_digits(struct Text txt){
             }
         }  
     }    
-// Конец функции 2
 
 // Функция 3
 int cap_lets_in_a_row(struct Sentence *sent){
