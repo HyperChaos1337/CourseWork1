@@ -158,25 +158,19 @@ int sent_end(char sym) {
     return 1;
 }
 
-
 char *new_sent_in(){
     
     int i = 0;
     int size = step * sizeof(char);
     char *sent = malloc(size);
     char sym;
-    int flag = 0;
     do {
-        sym = getchar();
-        if (flag == 0 && sym >= 33) {
-            flag = 1;
-        }
-        if (flag == 1) {
+            sym = getchar();
             sent[i] = sym;
             i++;
             size += step * sizeof(char);
             sent = realloc(sent, size);
-        }
+     
     } while (sent_end(sym));
     sent[i] = '\0';
     return sent;
