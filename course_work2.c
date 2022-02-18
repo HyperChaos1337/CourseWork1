@@ -23,8 +23,7 @@ struct Text{
     int size;
     
 };
- 
-//Работа со строкой
+
 struct Sentence* readSentence(){
     
     int size = step;
