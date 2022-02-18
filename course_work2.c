@@ -10,7 +10,7 @@
 struct Sentence{
     
     int vow; 
-    int m; в
+    int m;
     int size; 
     char *str;
     
