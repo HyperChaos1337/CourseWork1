@@ -33,7 +33,7 @@ struct Sentence* readSentence(){
     
     do{
         if(i >= size - 2){
-            char *t = realloc(buffer, size + step); //Увеличение памяти в случае, если осталось 2 свободные ячейки
+            char *t = realloc(buffer, size + step);
             if (!t){
                 return NULL;
             }
@@ -44,7 +44,7 @@ struct Sentence* readSentence(){
         if (i == 0 && tmp == ' ') continue;
         buffer[i] = tmp;
         i++;
-    }while(tmp != '.' && tmp != '\n'); //Знаки препинания. На них заканчивается ввод предложения
+    }while(tmp != '.' && tmp != '\n');
     buffer[i] = '\0';
     
     struct Sentence *sentence = malloc(sizeof(struct Sentence));
