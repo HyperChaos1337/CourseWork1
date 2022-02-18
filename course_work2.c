@@ -57,17 +57,16 @@ struct Sentence* readSentence(){
     
 }
  
-//Проверка на повторное вхождение предложения. Возвращает соостветствующее логическое значение
-int re_entry(struct Sentence **txt, struct Sentence *sent, int i){
+int re_entry(struct Sentence **sent1, struct Sentence *sent2, int i){
     
     for(int j = 0; j < i; j++){
         int k = 0;
-        for(int j1 = 0; j1 < strlen(sent -> str); j1++){
-            if(tolower(txt[j]->str[j1]) == tolower(sent -> str[j1])){
+        for(int l = 0; l < strlen(sent2 -> str); l++){
+            if(tolower(sent1[j]->str[l]) == tolower(sent2 -> str[l])){
                 k++;
             }
         }
-        if(k == strlen(sent -> str) && k == strlen(txt[j] -> str)){
+        if(k == strlen(sent2 -> str) && k == strlen(sent1[j] -> str)){
             return 0;
         }
     }
