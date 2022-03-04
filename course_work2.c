@@ -218,11 +218,34 @@ int cap_lets_in_a_row(struct Sentence *sent){
     
 }
 
+void removal(struct Text *txt, int cap){
+    
+    free(txt->sents[cap]->str);
+    
+    for(int x = cap; x < txt->count-1; x++){
+        memmove(txt->sents[x], txt->sents[x+1], sizeof(struct Sentence*));
+    }
+    free(txt->sents[txt->count]);
+    
+    txt->count--;
+    txt->size--;
+    
+}
+
 void delSent(struct Text *txt){
     
-    for(int x = 0; x < txt->count; x++){
+    int x;
+    
+    for(x = 0; x < txt->count; x++){
+        if (cap_lets_in_a_row(txt->sents[x])){
+            removal(txt, x);
+            x--;
+        }
+    }
+    
+    for (x = 0; x < txt->count; x++){
         struct Sentence *s = txt->sents[x];
-        if (!cap_lets_in_a_row(txt->sents[x])) printf("%s\n", s->str);
+        printf("%s\n", s->str);
     }
     
 }
@@ -265,6 +288,35 @@ void sorting(struct Text txt){
         printf("%s\n", s->str);
     }
 }
+
+void the_longest_words(struct Text txt){
+    
+    int x, k, j;
+    
+    int counter = 0;
+    int sent_idx = 0;
+    int word_idx = 0;
+    
+    for(x = 0; x < txt.count; x++){
+        printf("%d ", sent_idx);
+        k = 0;
+        char *s = txt.sents[x]->str;
+        int max_len = 0;
+        int len = txt.sents[x]->m;
+        for(j = 0; j < len-1; j++){
+            if(s[j] != ' ' && s[j] != ',' && s[j] != ';') k++;
+            else k = 0;
+            if(k > max_len){
+                max_len = k;
+            }
+            word_idx = j;
+        }
+        sent_idx++;
+        printf("%d\n", max_len);
+    }
+}
+    
+
     
 int main(){
     
@@ -276,7 +328,8 @@ int main(){
     puts("2. Замена на входное предложение всех цифр в тексте");
     puts("3. Удалить предложения с 3-мя идущими подряд буквами в верхнем регистре");
     puts("4. Отсортировать по уменьшению количества слов начинающихся с гласной буквы");
-    puts("5. Выйти из программы\n");
+    puts("5. Найти максимальную длину слова в предложении и вывести строку вида(<номер_предложения> <индекс слова с начала предложения>)");
+    puts("6. Выйти из программы\n");
     int a;
     scanf("%d", &a);
     
@@ -298,6 +351,10 @@ int main(){
             sorting(text);
             break;
         case(5):
+            puts("Результат:");
+            the_longest_words(text);
+            break;
+        case(6):
             puts("Пользователь запросил выход из программы");
             break;
         default:
